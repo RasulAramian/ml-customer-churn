@@ -1,0 +1,10 @@
+services:
+  api:
+    build: .
+    container_name: customer-churn-compose
+
+    environment:
+      MY_PORT: "${MY_PORT}"
+
+    ports:
+      - "8002:8000"
