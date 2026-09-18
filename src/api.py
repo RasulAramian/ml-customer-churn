@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Literal
 import pandas as pd
-
+from src.model_metadata import MODEL_NAME, MODEL_VERSION
 from src.predict import predict_churn
 
 
@@ -12,6 +12,12 @@ app = FastAPI()
 def health():
     return {"status": "healthy"}
 
+@app.get("/model-info")
+def model_info():
+    return {
+        "model_name": MODEL_NAME,
+        "model_version": MODEL_VERSION
+    }
 
 class Customer(BaseModel):
     gender: Literal["Female", "Male"]
