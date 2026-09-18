@@ -4,6 +4,8 @@ from typing import Literal
 import pandas as pd
 import logging
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from src.model_metadata import MODEL_NAME, MODEL_VERSION
 from src.predict import predict_churn
 
@@ -22,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
+Instrumentator().instrument(app).expose(app)
 
 # =========================
 # Health check
