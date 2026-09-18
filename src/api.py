@@ -8,6 +8,10 @@ from src.predict import predict_churn
 
 app = FastAPI()
 
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
 
 class Customer(BaseModel):
     gender: Literal["Female", "Male"]
