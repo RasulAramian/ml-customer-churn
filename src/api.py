@@ -2,15 +2,39 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Literal
 import pandas as pd
+import logging
+
 from src.model_metadata import MODEL_NAME, MODEL_VERSION
 from src.predict import predict_churn
 
 
+# =========================
+# Logging
+# =========================
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+# =========================
+# FastAPI application
+# =========================
+
 app = FastAPI()
+
+
+# =========================
+# Health check
+# =========================
 
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+
+# =========================
+# Model information
+# =========================
 
 @app.get("/model-info")
 def model_info():
@@ -19,7 +43,13 @@ def model_info():
         "model_version": MODEL_VERSION
     }
 
+
+# =========================
+# Customer input schema
+# =========================
+
 class Customer(BaseModel):
+
     gender: Literal["Female", "Male"]
 
     SeniorCitizen: Literal[0, 1]
@@ -99,8 +129,14 @@ class Customer(BaseModel):
     TotalCharges: float = Field(ge=0)
 
 
+# =========================
+# Prediction endpoint
+# =========================
+
 @app.post("/predict")
 def predict(customer: Customer):
+
+    logger.info("Prediction request received")
 
     customer_df = pd.DataFrame(
         [customer.model_dump()]
@@ -108,6 +144,13 @@ def predict(customer: Customer):
 
     prediction, probability = predict_churn(
         customer_df
+    )
+
+    logger.info(
+        "Prediction completed | model=%s | version=%s | prediction=%s",
+        MODEL_NAME,
+        MODEL_VERSION,
+        prediction
     )
 
     return {
