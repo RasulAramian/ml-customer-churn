@@ -71,3 +71,41 @@ jobs:
         run: |
           docker push \
             ghcr.io/rasularamian/ml-customer-churn:${{ github.sha }}
+
+  # =========================
+  # 3. Deploy
+  # =========================
+  deploy:
+    needs: publish
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: self-hosted
+
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Docker image
+        run: |
+          docker pull \
+            ghcr.io/rasularamian/ml-customer-churn:${{ github.sha }}
+
+      - name: Stop old container
+        run: |
+          docker stop customer-churn-production || true
+
+      - name: Remove old container
+        run: |
+          docker rm customer-churn-production || true
+
+      - name: Run new container
+        run: |
+          docker run -d \
+            --name customer-churn-production \
+            -p 8000:8000 \
+            ghcr.io/rasularamian/ml-customer-churn:${{ github.sha }}
