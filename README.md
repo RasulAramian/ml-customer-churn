@@ -64,192 +64,217 @@ GitHub Container Registry
 Automated Deployment
 ```
 
-🎯 Project Objectives
+## 🎯 Project Objectives
 
 The main objectives of this project are:
 
-Analyze customer behavior and identify churn-related patterns.
-Build a reproducible machine learning preprocessing pipeline.
-Train and evaluate multiple classification models.
-Select a production-ready model based on predictive performance and deployment requirements.
-Save the complete preprocessing and modeling pipeline.
-Expose the model through a REST API.
-Containerize the application using Docker.
-Add automated API and preprocessing tests.
-Implement application monitoring using Prometheus.
-Visualize service metrics using Grafana.
-Automate testing, image publishing, and deployment with GitHub Actions.
-Demonstrate a complete production-oriented ML workflow.
-📊 Dataset
+- Analyze customer behavior and identify churn-related patterns.
+- Build a reproducible machine learning preprocessing pipeline.
+- Train and evaluate multiple classification models.
+- Select a production-ready model based on predictive performance and deployment requirements.
+- Save the complete preprocessing and modeling pipeline.
+- Expose the model through a REST API.
+- Containerize the application using Docker.
+- Add automated API and preprocessing tests.
+- Implement application monitoring using Prometheus.
+- Visualize service metrics using Grafana.
+- Automate testing, image publishing, and deployment with GitHub Actions.
+- Demonstrate a complete production-oriented ML workflow.
+
+## 📊 Dataset
 
 The project uses the IBM Telco Customer Churn dataset.
 
 The dataset contains customer information such as:
 
-Demographics
-Account information
-Contract type
-Internet service
-Payment method
-Monthly charges
-Total charges
-Tenure
-Additional services
-Churn status
-Dataset Statistics
-Property	Value
-Number of customers	7,043
-Number of features	20
-Target variable	Churn
-Missing TotalCharges values	11
-Churn = No	5,174
-Churn = Yes	1,869
+- Demographics
+- Account information
+- Contract type
+- Internet service
+- Payment method
+- Monthly charges
+- Total charges
+- Tenure
+- Additional services
+- Churn status
+
+### Dataset Statistics
+
+| Property                      | Value   |
+| ----------------------------- | ------: |
+| Number of customers           |   7,043 |
+| Total columns in raw dataset  |      21 |
+| Features used for modeling    |      19 |
+| Target variable               | `Churn` |
+| Missing `TotalCharges` values |      11 |
+| Churn = No                    |   5,174 |
+| Churn = Yes                   |   1,869 |
 
 The raw dataset is stored at:
 
+```text
 data/Telco-Customer-Churn.csv
-🔎 Exploratory Data Analysis
+```
+
+## 🔎 Exploratory Data Analysis
 
 The notebook performs a structured exploratory analysis to understand the dataset before model development.
 
 The analysis includes:
 
-Dataset shape and schema
-Data types
-Missing values
-Duplicate records
-Target distribution
-Contract type and churn
-Tenure and churn
-Internet service and churn
-Payment method and churn
-Monthly charges
-Total charges
-Customer segmentation
+- Dataset shape and schema
+- Data types
+- Missing values
+- Duplicate records
+- Target distribution
+- Contract type and churn
+- Tenure and churn
+- Internet service and churn
+- Payment method and churn
+- Monthly charges
+- Total charges
+- Customer segmentation
 
 Examples of questions investigated during EDA include:
 
-How does churn vary across contract types?
-Are customers with shorter tenure more likely to churn?
-How is churn distributed across internet service types?
-Are payment methods associated with different churn rates?
-How are monthly charges distributed across customers?
+- How does churn vary across contract types?
+- Are customers with shorter tenure more likely to churn?
+- How is churn distributed across internet service types?
+- Are payment methods associated with different churn rates?
+- How are monthly charges distributed across customers?
 
 The complete analysis is available in:
 
+```text
 notebooks/customer_churn.ipynb
-🧹 Data Cleaning and Preprocessing
+```
+
+
+## 🧹 Data Cleaning and Preprocessing
 
 The preprocessing stage is implemented using a reproducible scikit-learn pipeline.
 
-Data Cleaning
+### Data Cleaning
 
 The dataset requires several preprocessing steps, including:
 
-Converting TotalCharges to numeric values.
-Handling missing values.
-Removing non-predictive columns.
-Separating features from the target variable.
-Removing exploratory-only variables before model training.
-Feature Types
+- Converting `TotalCharges` to numeric values.
+- Handling missing values.
+- Removing the non-predictive `customerID` column.
+- Separating features from the target variable.
+- Removing exploratory-only variables before model training.
+
+### Feature Types
 
 Numerical features include:
 
-SeniorCitizen
-tenure
-MonthlyCharges
-TotalCharges
+- `SeniorCitizen`
+- `tenure`
+- `MonthlyCharges`
+- `TotalCharges`
 
 Categorical features include variables such as:
 
-gender
-Partner
-Dependents
-PhoneService
-MultipleLines
-InternetService
-OnlineSecurity
-OnlineBackup
-DeviceProtection
-TechSupport
-StreamingTV
-StreamingMovies
-Contract
-PaperlessBilling
-PaymentMethod
-Numerical Preprocessing
+- `gender`
+- `Partner`
+- `Dependents`
+- `PhoneService`
+- `MultipleLines`
+- `InternetService`
+- `OnlineSecurity`
+- `OnlineBackup`
+- `DeviceProtection`
+- `TechSupport`
+- `StreamingTV`
+- `StreamingMovies`
+- `Contract`
+- `PaperlessBilling`
+- `PaymentMethod`
+
+### Numerical Preprocessing
 
 Numerical features are standardized using:
 
+```python
 StandardScaler
-Categorical Preprocessing
+```
+### Categorical Preprocessing
 
 Categorical features are encoded using:
 
+```python
 OneHotEncoder(handle_unknown="ignore")
+```
 
 This allows the production API to handle previously unseen categorical values without breaking the preprocessing pipeline.
 
-🤖 Machine Learning Models
+## 🤖 Machine Learning Models
 
 Several classification models are evaluated during the modeling stage.
 
 The project investigates:
 
-Logistic Regression
-Decision Tree
-Random Forest
+- Logistic Regression
+- Decision Tree
+- Random Forest
 
 The primary production model is:
 
+```text
 Logistic Regression
+```
 
 The final production artifact contains both preprocessing and the trained model inside a single scikit-learn pipeline.
 
 This prevents inconsistencies between training-time preprocessing and inference-time preprocessing.
 
-📈 Model Evaluation
+## 📈 Model Evaluation
 
 The models are evaluated using several classification metrics.
 
 These include:
 
-Accuracy
-Precision
-Recall
-F1-score
-Confusion Matrix
-ROC Curve
-ROC-AUC
-Precision-Recall Curve
-Classification threshold analysis
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Confusion Matrix
+- ROC Curve
+- ROC-AUC
+- Precision-Recall Curve
+- Classification threshold analysis
 
 The main evaluation metric used for model assessment is:
 
-ROC-AUC ≈ 0.836
+```text
+ROC-AUC ≈ 0.836 on the test set
+```
+
 
 The notebook also investigates how changing the classification threshold affects precision and recall.
 
 This is important in churn prediction because the business impact of false positives and false negatives may not be identical.
 
-💾 Model Persistence
+## 💾 Model Persistence
 
-The complete production pipeline is saved using joblib.
+The complete production pipeline is saved using `joblib`.
 
+```text
 models/logistic_regression_pipeline.joblib
+```
 
 The saved artifact contains:
-
+```text
 Preprocessing
      +
 Logistic Regression
-
+```
 Therefore, the API can load one artifact and perform the same transformations used during training.
 
-🔮 Prediction Pipeline
+## 🔮 Prediction Pipeline
 
 The production prediction flow is:
-
+```text
 Customer Input
       │
       ▼
@@ -266,41 +291,56 @@ Churn Probability
       │
       ▼
 Churn Prediction
-
+```
 The API returns both:
 
-Predicted churn class
-Churn probability
+- Predicted churn class
+- Churn probability
 
-Example response:
+### Example response:
 
+```JSON
 {
   "churn_prediction": 0,
   "churn_probability": 0.112
 }
-🌐 REST API
+```
+
+## 🌐 REST API
 
 The trained model is exposed through a FastAPI application.
 
 The API implementation is located at:
 
+```text
 src/api.py
-Start the API locally
-uvicorn src.api:app --reload --port 8000
+```
 
+### Start the API locally
+```bash
+uvicorn src.api:app --reload --port 8000
+```
 The API will be available at:
 
+```text
 http://localhost:8000
-Interactive API Documentation
+```
+
+### Interactive API Documentation
 
 FastAPI automatically provides interactive documentation at:
 
+```text
 http://localhost:8000/docs
-/predict
+```
+
+`/predict`
 
 The main endpoint is:
 
+```text
 POST /predict
+```
 
 It accepts customer information and returns a churn prediction and probability.
 
@@ -308,135 +348,141 @@ The API includes input validation using FastAPI/Pydantic.
 
 Invalid requests are rejected with an appropriate HTTP status code.
 
-🧪 Testing
+## 🧪 Testing
 
-Automated tests are implemented using pytest.
+Automated tests are implemented using `pytest`.
 
 The project includes tests for:
 
-Preprocessing
-Prediction behavior
-API endpoint functionality
+- Preprocessing
+- Prediction behavior
+- API endpoint functionality
 
 Run the complete test suite with:
 
+```bash
 pytest -v
-
+```
 The tests help ensure that changes to the project do not silently break the preprocessing pipeline or API.
 
-🐳 Docker
+## 🐳 Docker
 
 The application is containerized using Docker.
 
 The Docker image contains:
 
-Python runtime
-Project dependencies
-Source code
-Trained model
-FastAPI application
+- Python runtime
+- Project dependencies
+- Source code
+- Trained model
+- FastAPI application
 
-Build the image:
-
+### Build the image
+```bash
 docker build -t customer-churn .
-
-Run the container:
-
+```
+### Run the container:
+```bash
 docker run -d \
   --name customer-churn \
   -p 8000:8000 \
   customer-churn
-
+```
 The API is then available at:
 
+```text
 http://localhost:8000
-🧩 Docker Compose
+```
+
+## 🧩 Docker Compose
 
 The project also includes a multi-service Docker Compose setup.
 
 The stack contains:
 
-FastAPI
-Prometheus
-Grafana
+- FastAPI
+- Prometheus
+- Grafana
 
-Start the complete stack:
-
+### Start the complete stack:
+```bash
 docker compose up -d --build
-
-Check running services:
-
+```
+### Check running services:
+```bash
 docker ps
-
-Stop the stack:
-
+```
+### Stop the stack:
+```bash
 docker compose down
-Service Endpoints
-Service	URL
-FastAPI	http://localhost:8002
-FastAPI Docs	http://localhost:8002/docs
-Prometheus	http://localhost:9090
-Grafana	http://localhost:3000
+```
+## Service Endpoints
+| Service      |  URL                         |
+| ------------ | ---------------------------- |
+| FastAPI      | `http://localhost:8002`      |
+| FastAPI Docs | `http://localhost:8002/docs` |
+| Prometheus   | `http://localhost:9090`      |
+| Grafana      | `http://localhost:3000`      |
 
-The API container listens on port 8000, while Docker Compose exposes it on host port 8002.
+The API container listens on port `8000`, while Docker Compose exposes it on host port `8002`.
 
-📡 Monitoring
+## 📡 Monitoring
 
 Application metrics are exposed through:
 
-/metrics
+`/metrics`
 
 Prometheus collects these metrics from the API service.
 
 The monitoring stack tracks metrics such as:
 
-API availability
-Total HTTP requests
-Request rate
-Average response time
-4xx client errors
-5xx server errors
+- API availability
+- Total HTTP requests
+- Request rate
+- Average response time
+- 4xx client errors
+- 5xx server errors
 
 This provides basic observability for the deployed machine learning service.
 
-📊 Grafana Dashboard
+## 📊 Grafana Dashboard
 
 Grafana is used to visualize application metrics collected by Prometheus.
 
 The dashboard includes panels for:
 
-API Status
+### API Status
 
 Shows whether the API service is available.
 
-Total HTTP Requests
+### Total HTTP Requests
 
 Tracks the total number of requests received by the API.
 
-Request Rate
+### Request Rate
 
 Shows the request rate over time.
 
-Average Response Time
+### Average Response Time
 
 Tracks the average API response latency.
 
-Client Errors
+### Client Errors
 
 Tracks HTTP 4xx responses.
 
-Server Errors
+### Server Errors
 
 Tracks HTTP 5xx responses.
 
 This allows the behavior of the deployed service to be monitored without inspecting application logs manually.
 
-🔄 CI/CD
+## 🔄 CI/CD
 
 The project uses GitHub Actions to automate the software delivery workflow.
 
-The CI/CD pipeline performs:
-
+### The CI/CD pipeline performs:
+```text
 Git Push
    │
    ▼
@@ -450,37 +496,43 @@ Publish Image to GHCR
    │
    ▼
 Deploy to Self-Hosted Runner
-Continuous Integration
+```
+### Continuous Integration
+
 
 The test job:
 
-Checks out the repository.
-Sets up Python.
-Installs dependencies.
-Runs the complete pytest suite.
-Container Publishing
+- Checks out the repository.
+- Sets up Python.
+- Installs dependencies.
+- Runs the complete pytest suite.
+
+### Container Publishing
 
 After successful tests, the Docker image is built and published to:
 
+```text
 GitHub Container Registry (GHCR)
+```
 
 The image is tagged using the Git commit SHA.
 
 This provides immutable image versions for deployment.
 
-Continuous Deployment
+### Continuous Deployment
 
 The deployment stage:
 
-Logs in to GHCR.
-Pulls the newly published image.
-Stops the previous container.
-Removes the old container.
-Starts the new container.
+- Logs in to GHCR.
+- Pulls the newly published image.
+- Stops the previous container.
+- Removes the old container.
+- Starts the new container.
 
 The deployment runs on a self-hosted GitHub Actions runner.
 
-📦 Project Structure
+## 📦 Project Structure
+```text 
 ml-customer-churn/
 │
 ├── .github/
@@ -518,169 +570,186 @@ ml-customer-churn/
 ├── pytest.ini
 ├── requirements.txt
 └── README.md
-⚙️ Installation
+```
+## ⚙️ Installation
 
-Clone the repository:
+### Clone the repository:
 
+```bash
 git clone https://github.com/RasulAramian/ml-customer-churn.git
+```
+### Move into the project directory:
 
-Move into the project directory:
-
+```bash
 cd ml-customer-churn
-
-Create a virtual environment:
-
+```
+### Create a virtual environment:
+```bash
 python -m venv .venv
+```
+### Activate it on Linux/macOS:
 
-Activate it on Linux/macOS:
-
+```bash
 source .venv/bin/activate
+```
+### Install dependencies:
 
-Install dependencies:
-
+```bash
 pip install -r requirements.txt
-▶️ Running the Project Locally
+```
+## ▶️ Running the Project Locally
 
-Start the API:
+### Start the API:
 
+```bash
 uvicorn src.api:app --reload --port 8000
+```
+### Open the interactive API documentation:
 
-Open the interactive API documentation:
-
+```text
 http://localhost:8000/docs
+```
 
-Run tests:
+### Run tests:
 
+```bash
 pytest -v
-🐳 Running the Complete Stack
+```
+## 🐳 Running the Complete Stack
 
 To start the API, Prometheus, and Grafana together:
 
+```bash
 docker compose up -d --build
+```
+### Check the containers
 
-Check the containers:
-
+```bash
 docker ps
+```
+### Access the services
 
-Access the services:
+|  Service          | URL                          |
+| ----------------- | ---------------------------- |
+| API               | `http://localhost:8002`      |
+| API Documentation | `http://localhost:8002/docs` |
+| Prometheus        | `http://localhost:9090`      |
+| Grafana           | `http://localhost:3000`      |
 
-API:
-http://localhost:8002
+### Stop the services
 
-API Documentation:
-http://localhost:8002/docs
-
-Prometheus:
-http://localhost:9090
-
-Grafana:
-http://localhost:3000
-
-Stop the services:
-
+```bash
 docker compose down
-🔐 Configuration and Security
+```
+## 🔐 Configuration and Security
 
 Environment-specific configuration is separated from the application code.
 
 Example environment configuration:
 
+```text
 .env.example
+```
 
 Sensitive configuration should not be committed to Git.
 
 The project uses:
 
+```text
 .env
+```
 
-for local environment-specific variables and excludes it through .gitignore.
+for local environment-specific variables and excludes it through `.gitignore`.
 
-The .env.example file provides a template for required configuration without exposing sensitive values.
+The `.env.example` file provides a template for required configuration without exposing sensitive values.
 
-🧠 Engineering Practices
+## 🧠 Engineering Practices
 
 This project demonstrates several practical machine learning engineering principles:
 
-Reproducible preprocessing
+### Reproducible preprocessing
 
 The preprocessing logic is included inside the model pipeline.
 
-Separation of concerns
+### Separation of concerns
 
 Data processing, training, evaluation, prediction, and API logic are separated into different modules.
 
-Automated testing
+### Automated testing
 
 Core functionality is covered by pytest tests.
 
-Containerization
+### Containerization
 
 The API and model are packaged into a Docker image.
 
-Observability
+### Observability
 
 Prometheus and Grafana provide basic application monitoring.
 
-CI/CD automation
+### CI/CD automation
 
 GitHub Actions automatically tests, builds, publishes, and deploys the application.
 
-Versioned deployment artifacts
+### Versioned deployment artifacts
 
 Docker images are tagged using Git commit SHA values.
 
-📓 Notebook
+## 📓 Notebook
 
 The complete machine learning workflow is documented in:
 
+```text
 notebooks/customer_churn.ipynb
+```
 
 The notebook covers:
 
-Project Overview
-Business Problem
-Dataset Overview
-Data Quality Assessment
-Data Cleaning
-Exploratory Data Analysis
-Feature Preparation
-Train/Test Split
-Preprocessing Pipeline
-Model Training
-Model Evaluation
-ROC-AUC Analysis
-Precision-Recall Analysis
-Threshold Analysis
-Model Interpretation
-Permutation Importance
-Model Persistence
-Prediction Example
-Conclusions
-Future Improvements
+- Project Overview
+- Business Problem
+- Dataset Overview
+- Data Quality Assessment
+- Data Cleaning
+- Exploratory Data Analysis
+- Feature Preparation
+- Train/Test Split
+- Preprocessing Pipeline
+- Model Training
+- Model Evaluation
+- ROC-AUC Analysis
+- Precision-Recall Analysis
+- Threshold Analysis
+- Model Interpretation
+- Permutation Importance
+- Model Persistence
+- Prediction Example
+- Conclusions
+- Future Improvements
 
 The notebook is designed to provide a clear analytical narrative rather than simply presenting a collection of code cells.
 
-🚀 Future Improvements
+## 🚀 Future Improvements
 
 Possible extensions include:
 
-Hyperparameter optimization across all candidate models.
-Cross-validation and more extensive model comparison.
-Model calibration.
-Experiment tracking with MLflow.
-Data drift detection.
-Model performance monitoring.
-Automated retraining pipelines.
-Cloud deployment.
-Kubernetes-based deployment.
-Authentication and authorization for the API.
-API rate limiting.
-Structured application logging.
-Distributed monitoring and alerting.
-📌 Key Takeaways
+- Hyperparameter optimization across all candidate models.
+- Cross-validation and more extensive model comparison.
+- Model calibration.
+- Experiment tracking with MLflow.
+- Data drift detection.
+- Model performance monitoring.
+- Automated retraining pipelines.
+- Cloud deployment.
+- Kubernetes-based deployment.
+- Authentication and authorization for the API.
+- API rate limiting.
+- Structured application logging.
+- Distributed monitoring and alerting.
+
+## 📌 Key Takeaways
 
 This project demonstrates the complete lifecycle of a machine learning application:
-
+```text
 Data
  ↓
 EDA
@@ -704,24 +773,25 @@ Testing
 CI/CD
  ↓
 Deployment
-
+```
 The main focus is not only on building a predictive model, but also on demonstrating how machine learning can be integrated into a reproducible, testable, deployable, and monitorable software system.
 
-👨‍💻 Author
+## 👨‍💻 Author
 
-Rasul Aramian
+**Rasul Aramian**
 
-PhD in Mathematics — Lie Algebra
-MSc — Group Theory & Algebraic Graph Theory
+**PhD in Mathematics — Lie Algebra**
+**MSc — Group Theory & Algebraic Graph Theory**
 
-Interests:
+### Interests:
 
-Machine Learning
-Deep Learning
-Mathematical Modeling
-Machine Learning Engineering
-AI Applications
-Data Science
-📄 License
+- Machine Learning
+- Deep Learning
+- Mathematical Modeling
+- Machine Learning Engineering
+- AI Applications
+- Data Science
+
+## 📄 License
 
 This project is intended for educational and portfolio purposes.
