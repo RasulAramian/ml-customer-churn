@@ -62,6 +62,8 @@ GitHub Container Registry
    │
    ▼
 Automated Deployment
+text```
+
 🎯 Project Objectives
 
 The main objectives of this project are:
