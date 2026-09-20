@@ -62,7 +62,7 @@ GitHub Container Registry
    │
    ▼
 Automated Deployment
-text```
+```
 
 🎯 Project Objectives
 
